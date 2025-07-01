@@ -101,43 +101,56 @@ const CourseContent = () => {
          <div className='course-content'>
             <div className="course-section">
                <Accordion defaultActiveKey="0" flush>
-                  {courseContent.map((section, index) => {
-                     // Extract sectionId from the section
-                     const sectionId = index;
+  {courseContent.length === 0 ? (
+   <p>Loading...</p>
+) : (
+   courseContent.map((section, index) => {
+      const sectionId = section._id;
+      const isSectionCompleted = completedModuleIds.includes(sectionId);
 
-                     // Check if the sectionId is not in completedModuleIds
-                     const isSectionCompleted = !completedModuleIds.includes(sectionId);
+      return (
+         <Accordion.Item key={sectionId} eventKey={index.toString()}>
+            <Accordion.Header>{section.S_title}</Accordion.Header>
+            <Accordion.Body>
+               {section.S_description}
+               {section.S_content && (
+                  <>
+                     <Button
+                        color='success'
+                        className='mx-2'
+                        variant="text"
+                        size="small"
+                        onClick={() => playVideo(`http://localhost:8000${section.S_content.path}`, index)}
+                     >
+                        Play Video
+                     </Button>
+                     {!isSectionCompleted && !completedSections.includes(index) && (
+                        <Button
+                           variant='success'
+                           size='sm'
+                           onClick={() => completeModule(sectionId)}
+                           disabled={playingSectionIndex !== index}
+                        >
+                           Completed
+                        </Button>
+                     )}
+                  </>
+               )}
+            </Accordion.Body>
+         </Accordion.Item>
+      );
+   })
+)}
 
-                     return (
-                        <Accordion.Item key={index} eventKey={index.toString()}>
-                           <Accordion.Header>{section.S_title}</Accordion.Header>
-                           <Accordion.Body>
-                              {section.S_description}
-                              {section.S_content && (
-                                 <>
-                                    <Button color='success' className='mx-2' variant="text" size="small" onClick={() => playVideo(`http://localhost:8000${section.S_content.path}`, index)}>
-                                       Play Video
-                                    </Button>
-                                    {isSectionCompleted && !completedSections.includes(index) && (
-                                       <Button
-                                          variant='success'
-                                          size='sm'
-                                          onClick={() => completeModule(sectionId)}
-                                          disabled={playingSectionIndex !== index}
-                                       >
-                                          Completed
-                                       </Button>
-                                    )}
-                                 </>
-                              )}
-                           </Accordion.Body>
-                        </Accordion.Item>
-                     );
-                  })}
-                  {completedModule.length === courseContent.length && (
-                     <Button className='my-2' onClick={() => setShowModal(true)}>Download Certificate</Button>
-                  )}
-               </Accordion>
+
+  {courseContent.length > 0 &&
+    completedModule.length === courseContent.length && (
+      <Button className="my-2" onClick={() => setShowModal(true)}>
+        Download Certificate
+      </Button>
+    )}
+</Accordion>
+
             </div>
             <div className="course-video w-50">
                {currentVideo && (

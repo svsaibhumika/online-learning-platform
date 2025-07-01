@@ -13,6 +13,7 @@ const {
   sendCourseContentController,
   completeSectionController,
   sendAllCoursesUserController,
+  addSectionController,
 } = require("../controllers/userControllers");
 
 const router = express.Router();
@@ -55,5 +56,10 @@ router.get('/coursecontent/:courseid', authMiddleware, sendCourseContentControll
 router.post('/completemodule', authMiddleware, completeSectionController)
 
 router.get('/getallcoursesuser', authMiddleware, sendAllCoursesUserController)
+
+router.put('/addsection/:courseid', authMiddleware, addSectionController);
+
+router.post('/addsection/:courseId', authMiddleware, addSectionController);
+
 
 module.exports = router;

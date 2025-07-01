@@ -5,6 +5,7 @@ const userSchema = require("../schemas/userModel");
 const courseSchema = require("../schemas/courseModel");
 const enrolledCourseSchema = require("../schemas/enrolledCourseModel");
 const coursePaymentSchema = require("../schemas/coursePaymentModel");
+const Course = require("../schemas/courseModel");
 //////////for registering/////////////////////////////
 const registerController = async (req, res) => {
   try {
@@ -187,6 +188,42 @@ const deleteCourseController = async (req, res) => {
   }
 };
 
+const addSectionController = async (req, res) => {
+  try {
+    const { S_title, S_description } = req.body;
+    const courseId = req.params.courseid;
+
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
+
+    const newSection = {
+      S_title,
+      S_description,
+    };
+
+    course.sections.push(newSection);
+    await course.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Section added successfully",
+      data: course,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
 ////enrolled course by the student
 
 const enrolledCourseController = async (req, res) => {
@@ -364,4 +401,5 @@ module.exports = {
   sendCourseContentController,
   completeSectionController,
   sendAllCoursesUserController,
+  addSectionController,
 };

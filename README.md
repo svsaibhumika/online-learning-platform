@@ -56,13 +56,16 @@ This will start the React app, usually on http://localhost:3000.
 Create a .env file inside the backend/ folder:
 ```env
 PORT=5000
-DATABASE_URL=mongodb+srv://myUser:myPassword@cluster0.abcde.mongodb.net/online-learning?retryWrites=true&w=majority
-JWT_SECRET=mySuperSecretKey123
+DATABASE_URL=mongodb+srv://<username>:<password>@<cluster-address>/online-learning?retryWrites=true&w=majority
+JWT_SECRET=<your_jwt_secret>
 ```
-- Replace myUser and myPassword with your MongoDB Atlas credentials.
-- Replace cluster0.abcde.mongodb.net with your MongoDB cluster host.
-- You can use any database name (e.g., online-learning).
-- Set a strong JWT_SECRET value for authentication.
+- <username> → your MongoDB username
+
+- <password> → your MongoDB password
+
+- <cluster-address> → your MongoDB Atlas cluster hostname
+
+- <your_jwt_secret> → a strong secret string for JWT
 
 #### Frontend .env
 
@@ -84,3 +87,4 @@ cd frontend
 npm start
 ```
 #### 3.Open http://localhost:3000 in your browser.
+
